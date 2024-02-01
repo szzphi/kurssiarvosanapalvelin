@@ -10,17 +10,20 @@
 <body>
     <h1>Kurssiarvosanat</h1>
     <div>
-        <form>
-            <input type="text" id="kurssi" placeholder="kurssin nimi">
-            <input type="text" id="opiskelija" placeholder="opiskelijan nimi">
+        <form id="haku">
+            <input type="text" id="kurssi" name="kurssi" placeholder="kurssin nimi">
+            <input type="text" id="opiskelija" name="opiskelija" placeholder="opiskelijan nimi">
             <button type="submit" id="hae">Hae</button>
         </form>
         <div id="hakutulos"></div>
     </div>
     <div>
         <h2>Lisää kurssiarvosanoja</h2>
-        <textarea id="kurssiarvosanat"></textarea>
-        <button id="lataa">Lisää</button>
+        <form id="lisaa">
+            <textarea id="kurssiarvosanat" name="kurssiarvosanat" rows="10" cols="60"></textarea>
+            <button type="submit" id="lataa">Lisää</button>
+        </form>
+        <div id="lataustulos"></div>
     </div>
 </body>
 </html>
