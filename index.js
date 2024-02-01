@@ -5,6 +5,9 @@ const path = require('path');
 const app = express();
 const {port, host} = require('./config.json');
 
+// Lue kurssiarvosanat.json tiedosto
+const kurssiarvosanat = require('./kurssiarvosanat.json');
+
 // Staattinen hakemisto HTML, JS ja CSS-tiedostoille
 app.use('/inc', express.static('includes'));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'templates/index.html')));
