@@ -6,12 +6,12 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 const {port, host} = require('./config.json');
 
-// Lue kurssiarvosanat.json tiedosto
-const kurssiarvosanat = require('./kurssiarvosanat.json');
-
 // Staattinen hakemisto HTML, JS ja CSS-tiedostoille
 app.use('/inc', express.static('includes'));
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'templates/index.html')));
+
+// Lue kurssiarvosanat.json tiedosto
+let kurssiarvosanat = require('./kurssiarvosanat.json');
 
 // Polku joka vastaanottaa CSV-tiedoston
 app.post('/lataa', (req, res) => {
@@ -37,10 +37,23 @@ app.post('/lataa', (req, res) => {
       };
       uudet.push(arvosanaOlio);
     }
-    const kurssiarvosanat2 = kurssiarvosanat.concat(uudet);
-    console.log(kurssiarvosanat2);
-    // TODO: tallenna kurssiarvosanat2
-    res.json({"viesti": "ok"});
+    kurssiarvosanat = kurssiarvosanat.concat(uudet);
+
+    fs.writeFile(
+      'kurssiarvosanat.json',
+      JSON.stringify(kurssiarvosanat),
+      { encoding: 'utf8' },
+      function(err) {
+        if (err) {
+          console.log('Virhe tiedostoon kirjoittamisessa.');
+          res.status(500).json({"viesti": "virhe"});
+        }
+        else {
+          console.log('Kurssiarvosanat kirjoitettu tiedostoon.');
+          res.json({"viesti": "ok"});
+        }
+      }
+    );
 });
 
 // TODO: Polku joka vastaanottaa ja vastaa hakuun
