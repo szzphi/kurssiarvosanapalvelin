@@ -29,6 +29,7 @@ async function search() {
       body: formData,
     });
     // TODO: laita vastaus hakutulos-elementtiin
+    // TODO: huomaa tyhjä vastaus
     console.log(await response.json());
   } catch (e) {
     // TODO: laita virheilmoitus html:ään
