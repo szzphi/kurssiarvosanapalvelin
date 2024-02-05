@@ -31,9 +31,9 @@ app.post('/lataa', (req, res) => {
 
       // luodaan uusi olio ja lisätään se taulukkoon
       let arvosanaOlio = {
-        kurssi: arvosanaArray[0],
-        opiskelija: arvosanaArray[1],
-        arvosana: arvosanaArray[2],
+        kurssi: arvosanaArray[0].replaceAll('"',''),
+        opiskelija: arvosanaArray[1].replaceAll('"',''),
+        arvosana: parseInt(arvosanaArray[2].replaceAll('"','')),
       };
       uudet.push(arvosanaOlio);
     }
