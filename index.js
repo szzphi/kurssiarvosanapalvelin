@@ -56,6 +56,24 @@ app.post('/lataa', (req, res) => {
     );
 });
 
-// TODO: Polku joka vastaanottaa ja vastaa hakuun
+// Polku joka vastaanottaa ja vastaa hakuun
+app.post('/hae', (req, res) => {
+  const opiskelija = req.body.opiskelija;
+  const kurssi = req.body.kurssi;
+
+  const vastaus = [];
+  // Looppi kaikkien kurssiarvosanojen yli
+  for (kurssiarvosana of kurssiarvosanat) {
+    // Vertailee arvosanoja ja lisää osumat vastaukseen...
+    if ((opiskelija == undefined && kurssiarvosana.kurssi.includes(kurssi))
+      || (kurssi == undefined && kurssiarvosana.opiskelija.includes(opiskelija))
+      || (kurssiarvosana.opiskelija.includes(opiskelija) && kurssiarvosana.kurssi.includes(kurssi))
+    ) {
+      vastaus.push(kurssiarvosana);
+    }
+  }
+  // Lähetetään vastaus
+  res.json(vastaus);
+});
 
 app.listen(port, host, () => {console.log("Kurssiarvosana palvelin kuuntelee")});
