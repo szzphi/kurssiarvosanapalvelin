@@ -13,6 +13,41 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'templates/index.ht
 // Lue kurssiarvosanat.json tiedosto
 let kurssiarvosanat = require('./kurssiarvosanat.json');
 
+fs.readFile('kurssiarvosanat.csv', 'utf8', function (err, data) {
+  if (err) {
+    console.log('Tapahtui virhe.');
+  }
+  else {
+    const kurssit = []
+
+    let rivit = data.split(/\r?\n/);
+
+    for (let rivi of rivit) {
+      if (rivi == 'kurssi,opiskelija,arvosana' || rivi == '') {
+        continue;
+      }
+      let luettuKurssi = rivi.split(',');
+
+      
+      let kurssiOlio = {
+        kurssi:luettuKurssi[0].replaceAll('"',''),
+        opiskelija: luettuKurssi[1].replaceAll('"',''),
+        arvosana: parseInt(luettuKurssi[2].replaceAll('"','')),
+      };
+      kurssit.push(kurssiOlio);
+    }
+    const kurssitJSON = JSON.stringify(kurssit, null, 2);
+
+    fs.writeFile('kurssiarvosanat.json', kurssitJSON, { encoding: 'utf8' }, function (err) {
+      if (err) {
+        console.log('Virhe tiedostoon kirjoittamisessa.')
+      }
+      else {
+        console.log('Kurssit kirjoitettu tiedostoon.');
+      }
+    });
+  }
+});
 // Polku joka vastaanottaa CSV-tiedoston
 app.post('/lataa', (req, res) => {
     const arvosanat = req.body.kurssiarvosanat;
